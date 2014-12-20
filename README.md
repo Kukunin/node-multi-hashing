@@ -15,6 +15,7 @@ Algorithms
 * x13
 * nist5
 * scrypt
+* neoscrypt
 * scryptn
 * scryptjane
 * keccak

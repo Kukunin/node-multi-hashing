@@ -12,6 +12,10 @@
   "dependencies": {
     "bindings": "*"
   },
+  "devDependencies": {
+    "coffee-script": "^1.12.4",
+    "mocha": "^3.2.0"
+  },
   "keywords": [
     "scrypt",
     "scryptjane",
@@ -30,8 +34,9 @@
     "neoscrypt",
     "decrypt"
   ],
-    "scripts": {
-    "install": "node-gyp rebuild"
+  "scripts": {
+    "install": "node-gyp rebuild",
+    "test": "node-gyp build && mocha --require coffee-script/register --compilers coffee:coffee-script"
   },
   "gypfile": true,
   "readmeFilename": "README.md",

@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "install": "node-gyp rebuild",
-    "test": "node-gyp build && mocha --require coffee-script/register --compilers coffee:coffee-script"
+    "test": "node-gyp configure build && mocha --require coffee-script/register --compilers coffee:coffee-script"
   },
   "gypfile": true,
   "readmeFilename": "README.md",

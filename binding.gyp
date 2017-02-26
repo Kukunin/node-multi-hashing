@@ -64,13 +64,13 @@
                 "<!(node -e \"require('nan')\")",
             ],
             "cflags": [
-                "-D_GNU_SOURCE -maes -fPIC -Ofast -flto -fuse-linker-plugin -funroll-loops -funswitch-loops -fpeel-loops"
+                "-D_GNU_SOURCE -maes -fPIC -O2 -flto -fuse-linker-plugin -funroll-loops -funswitch-loops -fpeel-loops"
             ],
             "cflags!": [ 
                 "-O2", "-fno-strict-aliasing", "-fno-tree-vrp", "-fno-omit-frame-pointer"
             ],
             "ldflags": [
-                "-fPIC -Ofast -flto -fuse-linker-plugin"
+                "-fPIC -O2 -flto -fuse-linker-plugin"
             ],
             "cflags_cc": [
                 "-std=c++0x -maes -march=native"

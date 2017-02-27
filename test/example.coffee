@@ -9,6 +9,11 @@ describe 'algorithms', ->
       expected = new Buffer('c648b4153cd81052583542367ae3408e44989023080bba2d60cc209ed04c8f3c', 'hex')
       assert.deepEqual(expected, multiHashing['quark'](@data))
 
+  describe 'cryptonight', ->
+    it 'returns right hash', ->
+      expected = new Buffer('e97ef3fc036d67626e54547a71307303dc5fa89b9df499feeaef9d11acadbe9b', 'hex')
+      assert.deepEqual(expected, multiHashing['cryptonight'](@data))
+
   describe 'neoscrypt', ->
     it 'returns right hash', ->
       expected = new Buffer('94367f3f5b4d60e0021e5b73f645003ebfd410b0f67f7be9f21367a02d6897ae', 'hex')

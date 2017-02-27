@@ -74,7 +74,10 @@
             ],
             "cflags_cc": [
                 "-std=c++0x -maes -march=native"
-            ]
+            ],
+            "xcode_settings": {
+              "OTHER_CFLAGS": ["-maes -O2"]
+            }
         }
     ]
 }

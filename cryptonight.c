@@ -187,15 +187,27 @@ static inline void ExpandAESKey256(char *keybuf)
 void cryptonight_hash(const char *input, char *output, uint32_t len)
 {
 	struct cryptonight_ctx *ctx;
+	uint8_t ctx_malloc = 0;
 #ifdef MAP_HUGETLB
-  ctx = (struct cryptonight_ctx *)mmap(0, sizeof(struct cryptonight_ctx), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB | MAP_POPULATE, 0, 0);
-	if(ctx == MAP_FAILED)
+	ctx = (struct cryptonight_ctx *)mmap(0, sizeof(struct cryptonight_ctx), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB | MAP_POPULATE, 0, 0);
+	if(ctx == MAP_FAILED) {
 #endif
-    ctx = (struct cryptonight_ctx *)malloc(sizeof(struct cryptonight_ctx));
+		ctx = (struct cryptonight_ctx *)malloc(sizeof(struct cryptonight_ctx));
+		ctx_malloc = 1;
+#ifdef MAP_HUGETLB
+	}
+#endif
 #ifdef MADV_HUGEPAGE
 	madvise(ctx, sizeof(struct cryptonight_ctx), MADV_RANDOM | MADV_WILLNEED | MADV_HUGEPAGE);
 #endif
 
+	do_cryptonight(ctx, input, output, len);
+
+	if(ctx_malloc) free(ctx);
+	else munmap(ctx, sizeof(struct cryptonight_ctx));
+}
+
+void do_cryptonight(struct cryptonight_ctx *ctx, const char *input, char *output, uint32_t len) {
     hash_process(&ctx->state.hs, (const uint8_t*) input, len);
     uint8_t ExpandedKey[256];
     size_t i, j;
@@ -323,9 +335,7 @@ void cryptonight_hash(const char *input, char *output, uint32_t len)
     memcpy(ctx->state.init, ctx->text, INIT_SIZE_BYTE);
     hash_permutation(&ctx->state.hs);
     extra_hashes[ctx->state.hs.b[0] & 3](&ctx->state, 200, output);
-    munmap(ctx, sizeof(struct cryptonight_ctx));
 }
-
 
 void cryptonight_fast_hash(const char* input, char* output, uint32_t len) {
     union hash_state state;

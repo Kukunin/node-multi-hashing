@@ -184,6 +184,8 @@ static inline void ExpandAESKey256(char *keybuf)
 	keys[14] = tmp1;
 }
 
+void do_cryptonight(struct cryptonight_ctx *ctx, const char *input, char *output, uint32_t len);
+
 void cryptonight_hash(const char *input, char *output, uint32_t len)
 {
 	struct cryptonight_ctx *ctx;

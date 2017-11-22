@@ -20,6 +20,7 @@
                 "hefty1.c",
                 "shavite3.c",
                 "cryptonight.c",
+                "cryptolight.c",
                 "x13.c",
                 "x14.c",
                 "boolberry.cc",

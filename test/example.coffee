@@ -14,6 +14,11 @@ describe 'algorithms', ->
       expected = new Buffer('e97ef3fc036d67626e54547a71307303dc5fa89b9df499feeaef9d11acadbe9b', 'hex')
       assert.deepEqual(expected, multiHashing['cryptonight'](@data))
 
+  describe 'cryptolight', ->
+    it 'returns right hash', ->
+      expected = new Buffer('f501e0d0c78890bd07926aa8a126c4f2a6724ff18282c101616112e0294659b9', 'hex')
+      assert.deepEqual(expected, multiHashing['cryptolight'](@data))
+
   describe 'neoscrypt', ->
     it 'returns right hash', ->
       expected = new Buffer('94367f3f5b4d60e0021e5b73f645003ebfd410b0f67f7be9f21367a02d6897ae', 'hex')

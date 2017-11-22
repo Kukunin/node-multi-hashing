@@ -23,6 +23,7 @@ extern "C" {
     #include "hefty1.h"
     #include "shavite3.h"
     #include "cryptonight.h"
+    #include "cryptolight.h"
     #include "x13.h"
     #include "x14.h"
     #include "nist5.h"
@@ -499,6 +500,37 @@ NAN_METHOD(cryptonight) {
     info.GetReturnValue().Set(returnValue);
 }
 
+NAN_METHOD(cryptolight) {
+    bool fast = false;
+
+    if (info.Length() < 1)
+        return THROW_ERROR_EXCEPTION("You must provide one argument.");
+
+    if (info.Length() >= 2) {
+        if(!info[1]->IsBoolean())
+            return THROW_ERROR_EXCEPTION("Argument 2 should be a boolean");
+        fast = info[1]->ToBoolean()->BooleanValue();
+    }
+
+    Local<Object> target = info[0]->ToObject();
+
+    if(!Buffer::HasInstance(target))
+        return THROW_ERROR_EXCEPTION("Argument should be a buffer object.");
+
+    char * input = Buffer::Data(target);
+    char output[32];
+
+    uint32_t input_len = Buffer::Length(target);
+
+    if(fast)
+        cryptolight_fast_hash(input, output, input_len);
+    else
+        cryptolight_hash(input, output, input_len);
+
+    v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
+    info.GetReturnValue().Set(returnValue);
+}
+
 NAN_METHOD(x13) {
     if (info.Length() < 1)
         return THROW_ERROR_EXCEPTION("You must provide one argument.");
@@ -710,6 +742,7 @@ NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("hefty1").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(hefty1)).ToLocalChecked());
     Nan::Set(target, Nan::New("shavite3").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(shavite3)).ToLocalChecked());
     Nan::Set(target, Nan::New("cryptonight").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight)).ToLocalChecked());
+    Nan::Set(target, Nan::New("cryptolight").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptolight)).ToLocalChecked());
     Nan::Set(target, Nan::New("x13").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(x13)).ToLocalChecked());
     Nan::Set(target, Nan::New("x14").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(x14)).ToLocalChecked());
     Nan::Set(target, Nan::New("boolberry").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(boolberry)).ToLocalChecked());
